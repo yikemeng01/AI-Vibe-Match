@@ -10,9 +10,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-COZE_API_TOKEN = os.getenv("COZE_API_TOKEN", "")
-WORKFLOW_ID    = os.getenv("WORKFLOW_ID", "")
-API_URL        = os.getenv("API_URL", "https://api.coze.cn/v1/workflow/run")
+def get_secret(key, default=""):
+    try:
+        return st.secrets[key]
+    except (KeyError, FileNotFoundError):
+        return os.getenv(key, default)
+
+COZE_API_TOKEN = get_secret("COZE_API_TOKEN")
+WORKFLOW_ID    = get_secret("WORKFLOW_ID")
+API_URL        = get_secret("API_URL", "https://api.coze.cn/v1/workflow/run")
 
 with open(os.path.join(os.path.dirname(__file__), "mock_data.json"), encoding="utf-8") as f:
     DEMO_MOCK = {item["id"]: item for item in json.load(f)}
@@ -163,12 +169,15 @@ with left:
             if st.button(label, key=f"demo_{i}", type="tertiary"):
                 mock = DEMO_MOCK[mock_id]
                 st.session_state["demo_brief"] = mock["input"]["brief"]
+                st.session_state["demo_image_url"] = mock["input"].get("image_url", "")
                 st.session_state["bloggers"] = mock["bloggers"]
                 st.rerun()
 
     uploaded = st.file_uploader("上传推广商品主图", type=["jpg", "jpeg", "png", "webp"])
     if uploaded:
         st.image(uploaded, width=160, caption="已上传商品图")
+    elif st.session_state.get("demo_image_url"):
+        st.image(st.session_state["demo_image_url"], width=160, caption="预设商品图")
 
     brief = st.text_area(
         "描述你想要的博主氛围感",

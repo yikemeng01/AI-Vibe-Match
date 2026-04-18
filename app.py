@@ -144,7 +144,6 @@ st.markdown(
     '📄 点击阅读完整产品方案 (PRD) 与技术架构</a></p>',
     unsafe_allow_html=True,
 )
-st.info("💻 提示：本项目为面向 B 端买手设计的后台工作流，请使用 **电脑端全屏浏览器** 访问以获得最佳的图表与卡片视觉体验。")
 st.markdown('<hr class="divider">', unsafe_allow_html=True)
 
 left, right = st.columns([1, 2], gap="large")
@@ -488,6 +487,7 @@ st.markdown("""
 <div style="margin-top:3rem;padding:.75rem 1.5rem;background:#F7F7F7;
     border-top:1px solid #EBEBEB;text-align:center;color:#BBB;
     font-size:.75rem;letter-spacing:.01em;line-height:1.8">
-    ⚠️ &nbsp;本系统为小红书 RPT 岗位面试专属 MVP Demo。当前展示的 KOC 数据基于大模型推演生成，未接入真实商业化数据库。
+    ⚠️ &nbsp;本系统为小红书 RPT 岗位面试专属 MVP Demo。当前展示的 KOC 数据基于大模型推演生成，未接入真实商业化数据库。<br>
+    💻 &nbsp;本项目为面向 B 端买手设计的后台工作流，建议使用电脑端全屏浏览器访问以获得最佳体验。
 </div>
 """, unsafe_allow_html=True)

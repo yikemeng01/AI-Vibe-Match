@@ -4,7 +4,7 @@
     "label": "🧴 高端护肤",
     "input": {
       "brief": "想推一款高端护肤精华，不要传统美妆博主，找有质感生活方式、偏艺术审美的跨界博主",
-      "image_url": ""
+      "image_url": "https://raw.githubusercontent.com/yikemeng01/AI-Vibe-Match/main/assets/MockPic_01.jpg"
     },
     "bloggers": [
       {
@@ -32,7 +32,7 @@
     "label": "🪑 中古家具",
     "input": {
       "brief": "推广一套中古家具，希望找有空间美学感的博主，不要硬核家居测评风格",
-      "image_url": ""
+      "image_url": "https://raw.githubusercontent.com/yikemeng01/AI-Vibe-Match/main/assets/MockPic_02.jpg"
     },
     "bloggers": [
       {
@@ -60,7 +60,7 @@
     "label": "🍵 中式养生",
     "input": {
       "brief": "想推中式养生茶饮系列，不要传统健康博主，找有东方美学、慢生活调性的跨界博主",
-      "image_url": ""
+      "image_url": "https://raw.githubusercontent.com/yikemeng01/AI-Vibe-Match/main/assets/MockPic_03.jpg"
     },
     "bloggers": [
       {

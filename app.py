@@ -169,6 +169,7 @@ with left:
             if st.button(label, key=f"demo_{i}", type="tertiary"):
                 mock = DEMO_MOCK[mock_id]
                 st.session_state["demo_brief"] = mock["input"]["brief"]
+                st.session_state["mock_brief"] = mock["input"]["brief"]
                 st.session_state["demo_image_url"] = mock["input"].get("image_url", "")
                 st.session_state["bloggers"] = mock["bloggers"]
                 st.rerun()
@@ -185,7 +186,20 @@ with left:
         placeholder="请用大白话描述你想要的博主氛围感、受众类型或种草场景\n\n例如：想推这款中古台灯，不要硬核家居博主，找点有生活情调的跨界博主",
         height=160,
     )
-    run = st.button("✨ AI 跨界寻源")
+
+    is_mock = (
+        not uploaded
+        and st.session_state.get("mock_brief")
+        and brief == st.session_state["mock_brief"]
+    )
+    if is_mock:
+        st.button("✨ AI 跨界寻源", disabled=True, help="当前为预设案例展示，修改文本或上传图片后可调用 AI")
+        run = False
+    else:
+        if uploaded or brief:
+            st.session_state.pop("mock_brief", None)
+            st.session_state.pop("demo_image_url", None)
+        run = st.button("✨ AI 跨界寻源")
 
 # ── API 工具函数 ──────────────────────────────────────────────
 

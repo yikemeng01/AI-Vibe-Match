@@ -51,6 +51,13 @@ st.markdown("""
     div[data-testid="stButton"] > button:hover {
         opacity: .9; color: white; transform: scale(1.02);
     }
+    div[data-testid="stButton"] > button:disabled {
+        background: #E0E0E0; color: #AAA;
+        border: 1.5px solid #CCC;
+        border-radius: 24px; padding: 0.6rem 2rem;
+        font-size: 1rem; font-weight: 600; width: 100%;
+        opacity: 1; transform: none; cursor: not-allowed;
+    }
 
     .subtitle { color: #888; font-size: .95rem; margin-top: -.5rem; margin-bottom: 1.5rem; }
     .divider  { border: none; border-top: 1px solid #EBEBEB; margin: 1.2rem 0; }
@@ -180,12 +187,17 @@ with left:
     elif st.session_state.get("demo_image_url"):
         st.image(st.session_state["demo_image_url"], width=160, caption="预设商品图")
 
+    demo_brief_val = st.session_state.pop("demo_brief", None)
+    if demo_brief_val is not None:
+        st.session_state["brief_value"] = demo_brief_val
+
     brief = st.text_area(
         "描述你想要的博主氛围感",
-        value=st.session_state.pop("demo_brief", ""),
+        value=st.session_state.get("brief_value", ""),
         placeholder="请用大白话描述你想要的博主氛围感、受众类型或种草场景\n\n例如：想推这款中古台灯，不要硬核家居博主，找点有生活情调的跨界博主",
         height=160,
     )
+    st.session_state["brief_value"] = brief
 
     is_mock = (
         not uploaded

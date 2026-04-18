@@ -193,10 +193,11 @@ with left:
         and brief == st.session_state["mock_brief"]
     )
     if is_mock:
-        st.button("✨ AI 跨界寻源", disabled=True, help="当前为预设案例展示，修改文本或上传图片后可调用 AI")
+        st.button("✨ AI 跨界寻源", disabled=True)
+        st.markdown('<p style="font-size:.75rem;color:#BBB;text-align:center;margin-top:-.5rem">当前为预设案例展示，修改文本或上传图片后可调用 AI</p>', unsafe_allow_html=True)
         run = False
     else:
-        if uploaded or brief:
+        if uploaded or (brief and brief != st.session_state.get("mock_brief")):
             st.session_state.pop("mock_brief", None)
             st.session_state.pop("demo_image_url", None)
         run = st.button("✨ AI 跨界寻源")

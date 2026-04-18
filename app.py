@@ -136,7 +136,7 @@ st.markdown("""
 st.markdown("# 🌼 蒲公英AI Vibe-Match审美匹配引擎")
 st.markdown('<p class="subtitle">小红书商业化选人升级 · 从标签筛选 → 多模态自然语言匹配</p>', unsafe_allow_html=True)
 st.markdown(
-    '<p style="margin-top:-.3rem;margin-bottom:1rem">'
+    '<p style="margin-top:-.3rem;margin-bottom:.6rem">'
     '<a href="https://github.com/yikemeng01/AI-Vibe-Match" target="_blank" '
     'style="display:inline-block;background:#F0F4FF;color:#4A6CF7;border-radius:20px;'
     'padding:4px 14px;font-size:.8rem;font-weight:500;text-decoration:none;'
@@ -144,6 +144,7 @@ st.markdown(
     '📄 点击阅读完整产品方案 (PRD) 与技术架构</a></p>',
     unsafe_allow_html=True,
 )
+st.info("💻 提示：本项目为面向 B 端买手设计的后台工作流，请使用 **电脑端全屏浏览器** 访问以获得最佳的图表与卡片视觉体验。")
 st.markdown('<hr class="divider">', unsafe_allow_html=True)
 
 left, right = st.columns([1, 2], gap="large")

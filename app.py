@@ -14,6 +14,9 @@ COZE_API_TOKEN = os.getenv("COZE_API_TOKEN", "")
 WORKFLOW_ID    = os.getenv("WORKFLOW_ID", "")
 API_URL        = os.getenv("API_URL", "https://api.coze.cn/v1/workflow/run")
 
+with open(os.path.join(os.path.dirname(__file__), "mock_data.json"), encoding="utf-8") as f:
+    DEMO_MOCK = {item["id"]: item for item in json.load(f)}
+
 st.set_page_config(page_title="蒲公英 AI Vibe-Match", page_icon="🌼", layout="wide")
 
 @st.dialog("功能提示")
@@ -126,15 +129,24 @@ st.markdown("""
 # ── 页头 ──────────────────────────────────────────────────────
 st.markdown("# 🌼 蒲公英AI Vibe-Match审美匹配引擎")
 st.markdown('<p class="subtitle">小红书商业化选人升级 · 从标签筛选 → 多模态自然语言匹配</p>', unsafe_allow_html=True)
+st.markdown(
+    '<p style="margin-top:-.3rem;margin-bottom:1rem">'
+    '<a href="https://github.com/yikemeng01/AI-Vibe-Match" target="_blank" '
+    'style="display:inline-block;background:#F0F4FF;color:#4A6CF7;border-radius:20px;'
+    'padding:4px 14px;font-size:.8rem;font-weight:500;text-decoration:none;'
+    'border:1px solid #D6E0FF;transition:all .2s ease">'
+    '📄 点击阅读完整产品方案 (PRD) 与技术架构</a></p>',
+    unsafe_allow_html=True,
+)
 st.markdown('<hr class="divider">', unsafe_allow_html=True)
 
 left, right = st.columns([1, 2], gap="large")
 
 # ── 案例预设 ──────────────────────────────────────────────────
 DEMO_CASES = [
-    ("🧴 高端护肤",   "想推一款高端护肤精华，不要传统美妆博主，找有质感生活方式、偏艺术审美的跨界博主"),
-    ("🪑 中古家具", "推广一套中古家具，希望找有空间美学感的博主，不要硬核家居测评风格"),
-    ("🍵 中式养生",   "想推中式养生茶饮系列，不要传统健康博主，找有东方美学、慢生活调性的跨界博主"),
+    ("🧴 高端护肤", "skincare"),
+    ("🪑 中古家具", "furniture"),
+    ("🍵 中式养生", "wellness"),
 ]
 
 with left:
@@ -146,10 +158,12 @@ with left:
         unsafe_allow_html=True,
     )
     demo_cols = st.columns(len(DEMO_CASES), gap="small")
-    for i, (label, text) in enumerate(DEMO_CASES):
+    for i, (label, mock_id) in enumerate(DEMO_CASES):
         with demo_cols[i]:
             if st.button(label, key=f"demo_{i}", type="tertiary"):
-                st.session_state["demo_brief"] = text
+                mock = DEMO_MOCK[mock_id]
+                st.session_state["demo_brief"] = mock["input"]["brief"]
+                st.session_state["bloggers"] = mock["bloggers"]
                 st.rerun()
 
     uploaded = st.file_uploader("上传推广商品主图", type=["jpg", "jpeg", "png", "webp"])
@@ -163,30 +177,6 @@ with left:
         height=160,
     )
     run = st.button("✨ AI 跨界寻源")
-
-# ── Mock 数据 ─────────────────────────────────────────────────
-MOCK_BLOGGERS = [
-    {
-        "name": "Léa 的胶片日记",
-        "tags": ["摄影", "复古穿搭", "OOTD"],
-        "cross_tag": "美妆/OOTD",
-        "fans": "28.6万",
-        "cpe": "¥0.38",
-        "reason": "Léa 的主页以高饱和胶片色调为视觉语言，大量出现复古家居陈设作为穿搭背景板。她的受众（18-28岁女性，偏好「有腔调的生活方式」）与中古台灯的目标消费者高度重叠。尽管她的主标签是 OOTD，但其内容中「物件即氛围」的叙事逻辑与你的商品调性天然契合。",
-        "scene": "建议以「今天的穿搭灵感来自这盏灯」为切入点，拍摄台灯点亮后的暖光氛围图，搭配当日 outfit 平铺，图文标题参考：「中古台灯 × 奶油穿搭，我的房间终于有了电影感」",
-        "match_score": 87,
-    },
-    {
-        "name": "慢生活研究所_Momo",
-        "tags": ["读书", "咖啡", "文具控"],
-        "cross_tag": "生活方式/读书",
-        "fans": "14.2万",
-        "cpe": "¥0.22",
-        "reason": "Momo 的内容核心是「慢下来的仪式感」，书桌场景出镜率极高，粉丝对桌面好物的种草转化率显著高于行业均值。台灯作为书桌场景的核心道具，在她的内容生态中属于强相关品类，且她的粉丝对「非大众品牌」的接受度更高，适合中古/小众品牌冷启动。",
-        "scene": "建议以「深夜读书必备」为场景，展示台灯在书桌上的实际使用状态，重点拍摄灯光打在书页上的质感特写。图文可做「我的书桌改造清单 vol.3」系列，自然植入，避免硬广感。",
-        "match_score": 79,
-    },
-]
 
 # ── API 工具函数 ──────────────────────────────────────────────
 
@@ -230,7 +220,6 @@ def parse_api_result(raw):
         result.append({
             "name": b.get("blogger_name", ""),
             "tags": tags,
-            "cross_tag": tags[0] if tags else "跨界",
             "fans": b.get("followers", ""),
             "cpe": b.get("cpe", ""),
             "reason": b.get("match_reason", ""),
@@ -352,8 +341,9 @@ def render_cards(bloggers):
         match_score = b.get("match_score", 75)
         dim_scores = gen_dim_scores(match_score, b["name"])
 
+        cross_tag = b.get("cross_tag") or (tags[0] if tags else "跨界")
         tags_html = ''.join(f'<span class="tag">{t}</span>' for t in tags)
-        tags_html += f'<span class="tag tag-cross">⚡ 跨界: {b["cross_tag"]}</span>'
+        tags_html += f'<span class="tag tag-cross">⚡ 跨界: {cross_tag}</span>'
 
         with st.container(border=True):
             # ── 卡片头部 ──
@@ -458,7 +448,8 @@ with right:
             st.warning(f"⚠️ API 异常（已降级到演示数据）：{error_msg}")
 
         if not st.session_state.bloggers:
-            st.session_state.bloggers = MOCK_BLOGGERS
+            fallback = list(DEMO_MOCK.values())[0]
+            st.session_state.bloggers = fallback["bloggers"]
 
     if st.session_state.get("bloggers"):
         bloggers = st.session_state.bloggers

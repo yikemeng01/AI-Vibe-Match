@@ -1,6 +1,6 @@
 # 🌼 蒲公英 AI Vibe-Match 审美匹配引擎
 
-**🚀 快速开始：[(https://red-ai-vibe-match-demo.streamlit.app/)] （考官点开即用，无需额外配置）**
+**🚀 快速开始：[(https://red-ai-vibe-match-demo.streamlit.app/)] （面试官点开即用，无需额外配置）**
 
 
 **小红书商业化蒲公英平台选人能力升级 Demo —— 从“传统标签筛选”进化到“多模态自然语言审美匹配”。**
